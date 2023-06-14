@@ -47,7 +47,11 @@ public class BinaryPacker {
 
     private long createMask(int size)
     {
-        return (1 << size) - 1;
+        if (size > 63)
+        {
+            return -1;
+        }
+        return (1L << size) - 1;
     }
 
     public void print()
