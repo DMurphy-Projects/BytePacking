@@ -62,7 +62,12 @@ public class BinaryPacker {
     {
         for (long l: data)
         {
-            System.out.println(String.format("%64s", Long.toBinaryString(l)).replace(' ', '0'));
+            printBinary(l);
         }
+    }
+
+    public void printBinary(long l)
+    {
+        System.out.println(String.format("%64s", Long.toBinaryString(l)).replace(' ', '0'));
     }
 }
