@@ -5,9 +5,7 @@ public class PackingTest {
         BinaryPacker binaryPacker = new BinaryPacker(10);
 
         binaryPacker.seek(0);
-        binaryPacker.write(255, 8);
-        binaryPacker.seek(3);
-        binaryPacker.write(0, 2);
+        binaryPacker.write(-1, 64);
 
         binaryPacker.printBinary();
     }

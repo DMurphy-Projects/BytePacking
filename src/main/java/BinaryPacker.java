@@ -16,7 +16,6 @@ public class BinaryPacker {
     public void write(long value, int digits)
     {
         int index = position / 64, localPosition = position % 64;
-        long mask = createMask(digits);
 
         boolean split = (position + digits) > 64;
         if (split)
@@ -24,13 +23,14 @@ public class BinaryPacker {
             int firstSize = 64 - localPosition;
             long firstHalfMask = createMask(firstSize);
 
-            long secondHalfMask = mask - firstHalfMask;
+            long secondHalfMask = createMask(digits - firstSize);
 
             writeMaskedValue(value & firstHalfMask, firstHalfMask, index, localPosition);
-            writeMaskedValue((value & secondHalfMask) >> firstSize, secondHalfMask,index+1, 0);
+            writeMaskedValue((value >> firstSize) & secondHalfMask, secondHalfMask,index+1, 0);
         }
         else
         {
+            long mask = createMask(digits);
             writeMaskedValue(value & mask, mask, index, localPosition);
         }
 
