@@ -26,7 +26,7 @@ public class BinaryPacker {
     {
         int index = position / 64, localPosition = position % 64;
 
-        boolean split = (position + digits) > 64;
+        boolean split = (localPosition + digits) > 64;
         if (split)
         {
             int firstSize = 64 - localPosition;
@@ -46,11 +46,16 @@ public class BinaryPacker {
         position += digits;
     }
 
+    public boolean canRead()
+    {
+        return (position + digits) <= (data.length * 64);
+    }
+
     public long read()
     {
         int index = position / 64, localPosition = position % 64;
         long mask = createMask(digits);
-        boolean split = (position + digits) > 64;
+        boolean split = (localPosition + digits) > 64;
 
         position += digits;
         if (split)
