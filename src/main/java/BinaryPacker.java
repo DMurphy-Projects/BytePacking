@@ -1,11 +1,12 @@
 public class BinaryPacker {
 
     long[] data;
-    int position = 0;
+    int position = 0, digits;
 
-    public BinaryPacker(int size)
+    public BinaryPacker(int size, int digits)
     {
         data = new long[size];
+        this.digits = digits;
     }
 
     public void seek(int position)
@@ -13,7 +14,7 @@ public class BinaryPacker {
         this.position = position;
     }
 
-    public void write(long value, int digits)
+    public void write(long value)
     {
         int index = position / 64, localPosition = position % 64;
 
@@ -37,12 +38,40 @@ public class BinaryPacker {
         position += digits;
     }
 
+    public long read()
+    {
+        int index = position / 64, localPosition = position % 64;
+        long mask = createMask(digits);
+        boolean split = (position + digits) > 64;
+
+        position += digits;
+        if (split)
+        {
+            int firstSize = 64 - localPosition;
+
+            long firstHalfMask = createMask(firstSize);
+            long secondHalfMask = createMask(digits - firstSize);
+
+            long firstHalf = readMaskedValue(firstHalfMask, index, localPosition);
+            long secondHalf = readMaskedValue(secondHalfMask, index + 1, 0) << firstSize;
+
+            return firstHalf | secondHalf;
+        }
+        else
+        {
+            return readMaskedValue(mask, index, localPosition);
+        }
+    }
+
     private void writeMaskedValue(long value, long mask, int index, int position)
     {
-        long base = data[index];
+        long positionValue = readMaskedValue(mask, index, position);
+        data[index] += ((value - positionValue) << position);
+    }
 
-        long positionValue = (base >> position) & mask;
-        data[index] = base + ((value - positionValue) << position);
+    private long readMaskedValue(long mask, int index, int position)
+    {
+        return (data[index] >> position) & mask;
     }
 
     private long createMask(int size)
