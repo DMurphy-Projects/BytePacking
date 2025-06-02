@@ -1,3 +1,5 @@
+import Helper.BinaryPacker;
+
 public class PackingTest {
 
     public static void main(String[] args)

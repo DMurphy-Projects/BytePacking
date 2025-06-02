@@ -1,3 +1,5 @@
+package Helper;
+
 public class BinaryPacker {
 
     long[] data;
