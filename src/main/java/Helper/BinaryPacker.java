@@ -11,6 +11,12 @@ public class BinaryPacker {
         this.digits = digits;
     }
 
+    public BinaryPacker(long[] data, int digits)
+    {
+        this.data = data;
+        this.digits = digits;
+    }
+
     public void seek(int position)
     {
         this.position = position;
@@ -104,5 +110,10 @@ public class BinaryPacker {
     public void printBinary(long l)
     {
         System.out.println(String.format("%64s", Long.toBinaryString(l)).replace(' ', '0'));
+    }
+
+    public long[] getRawData()
+    {
+        return data;
     }
 }
